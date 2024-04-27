@@ -1,20 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
+using System.Globalization;
 using System.Media;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace Chess
 {
+
     public partial class Chess : Form
     {
+        public string VarPlayerName1 = ""; 
+        public string VarPlayerName2 = "";
+        public string Gametype = "Rapid";
+
+
+        int secPlayer1 = 0;
+        int minPlayer1 = 3;
+        int secPlayer2 = 0;
+        int minPlayer2 = 3;
+
+        int secIncrement = 0;
+
+
+
+        int numTurn = 0;
         enum Role { White, Gold }
+
+
+
+        Color clr_celB = ColorTranslator.FromHtml("#604c37");
+        Color clr_celW = ColorTranslator.FromHtml("#e0d8ce");
+        Color clr_bac1k = ColorTranslator.FromHtml("#EFF5FB");
+        Color clr_select = ColorTranslator.FromHtml("#c9a171");
+
+
+        Color clr_White = ColorTranslator.FromHtml("#fffaf3");
+
+        Color clr_Black = ColorTranslator.FromHtml("#3d2a12");
+
 
         private Button[,] board = new Button[8, 8];
         private int[,] boardValues = new int[8, 8], valuesCopy = new int[8, 8];
@@ -44,6 +70,12 @@ namespace Chess
 
         private Role turn = Role.White;
 
+
+        
+
+
+
+
         public Chess()
         {
             InitializeComponent();
@@ -53,14 +85,16 @@ namespace Chess
                 {
                     boardValues[i, j] = -1;
                     board[i, j] = new Button();
-                    board[i, j].Size = new Size(70, 70);
-                    board[i, j].Location = new Point(j * 70, i * 70);
+                    board[i, j].Size = new Size(90, 90);
+                    board[i, j].Location = new Point(j * 90, i * 90);
                     board[i, j].Click += buttonClicked;
                     board[i, j].Cursor = Cursors.Hand;
                     board[i, j].FlatStyle = FlatStyle.Flat;
                     board[i, j].FlatAppearance.BorderSize = 1;
-                    if ((i + j) % 2 == 0) board[i, j].BackColor = Color.BurlyWood;
-                    else board[i, j].BackColor = Color.White;
+                    if ((i + j) % 2 == 0) board[i, j].BackColor = clr_celB;
+
+
+                    else board[i, j].BackColor = clr_celW;
                     board[i, j].FlatAppearance.BorderColor = board[i, j].BackColor;
                     Controls.Add(board[i, j]);
                 }
@@ -68,6 +102,8 @@ namespace Chess
             resize();
             place();
         }
+
+        
 
         private bool safe(int row, int col){
             return row < 8 && col < 8 && row >= 0 && col >= 0;
@@ -78,7 +114,7 @@ namespace Chess
         private void buttonClicked(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            int col = btn.Left / 70, row = btn.Top / 70;
+            int col = btn.Left / 90, row = btn.Top / 90;
 
             if (movePiece(btn, row, col)) return;
 
@@ -93,9 +129,9 @@ namespace Chess
 
             for (int i = 0; i < Moves.Count; i++)
             {
-                board[Moves[i].Y, Moves[i].X].BackColor = Color.Coral;
+                board[Moves[i].Y, Moves[i].X].BackColor = clr_select;
                 board[Moves[i].Y, Moves[i].X].FlatAppearance.BorderColor
-                    = Color.Coral;
+                    = clr_select;
             }
         }
 
@@ -243,7 +279,7 @@ namespace Chess
                 for (int j = 0; j < 8; j++)
                 {
                     board[i, j].BackColor
-                        = (i + j) % 2 == 0 ? Color.BurlyWood : Color.White;
+                        = (i + j) % 2 == 0 ? clr_celB : clr_celW;
                     board[i, j].FlatAppearance.BorderColor = board[i, j].BackColor;
                 }
         }
@@ -268,12 +304,68 @@ namespace Chess
 
                     turn = (turn == Role.White) ? Role.Gold : Role.White;
 
-                    resetBoard(); playsound();
+                    resetBoard();
+                    playsound();
+                    CheckPlayerName();
+
                     return true;
                 }
             }
             resetBoard();
             return false;
+        }
+
+        private void CheckPlayerName()
+        {
+            numTurn++;
+            if (numTurn % 2 == 0)
+            {
+                PlayerName1.Text = VarPlayerName1 ;
+                PlayerName2.Text = VarPlayerName2;
+
+                panelPlayer1.BackColor = clr_Black;
+                panelPlayer2.BackColor = clr_White;
+
+
+                label1.ForeColor =clr_White;
+                PlayerName1.ForeColor = clr_Black;
+                LableTimerPlayer2.ForeColor = clr_Black;
+
+
+                label3.ForeColor =clr_White;
+                PlayerName2.ForeColor =clr_White;
+                LableTimerPlayer1.ForeColor =clr_White;
+
+            }
+
+            else
+            {
+                PlayerName1.Text = VarPlayerName1;
+                PlayerName2.Text = VarPlayerName2;
+
+                panelPlayer2.BackColor = clr_Black;
+                panelPlayer1.BackColor = clr_White;
+
+
+
+                label1.ForeColor = clr_White;
+                PlayerName1.ForeColor =clr_White;
+                LableTimerPlayer2.ForeColor =clr_White;
+
+
+                label3.ForeColor = clr_White;
+                PlayerName2.ForeColor = clr_Black;
+                LableTimerPlayer1.ForeColor = clr_Black;
+
+
+
+
+
+
+
+
+            }
+
         }
 
         bool isKingSafe(int row, int col, int currentRow, int currentCol)
@@ -373,9 +465,9 @@ namespace Chess
             Graphics graphic;
             for (int i = 0; i < res.Count; i++)
             {
-                Bitmap bmp = new Bitmap(70, 70);
+                Bitmap bmp = new Bitmap(90, 90);
                 graphic = Graphics.FromImage(bmp);
-                graphic.DrawImage(res[i], 0, 0, 70, 70);
+                graphic.DrawImage(res[i], 0, 0, 90, 90);
                 graphic.Dispose();
                 res[i] = bmp;
             }
@@ -397,9 +489,142 @@ namespace Chess
                 || (turn == Role.Gold && boardValues[row, col] < 6);
         }
 
+
+        System.Timers .Timer timer = new System.Timers.Timer();
+
+        public void Play()
+        {
+
+            timer.Interval = 1000;
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Invoke(new Action(() =>
+            {
+               
+               
+                    GameBlitz();
+                    
+
+              
+
+
+
+
+
+
+            }));
+
+            throw new NotImplementedException();
+        }
+
+        private void GameBlitz()
+        {
+          
+
+            if (numTurn % 2 == 0)
+            {
+                secPlayer1--;
+                if (secPlayer1 < 0)
+                {
+                    secPlayer1 = 59;
+                    minPlayer1--;
+
+                }
+                if (minPlayer1 == 0 && secPlayer1 == 0)
+                {
+                    timer.Stop();
+                    MessageBox.Show("Time is up");
+                }
+                LableTimerPlayer1.Text = minPlayer1.ToString() + ":" + secPlayer1.ToString();
+            }
+            else
+            {
+                secPlayer2--;
+                if (secPlayer2 < 0)
+                {
+                    secPlayer2 = 59;
+                    minPlayer2--;
+                }
+                if (minPlayer2 == 0 && secPlayer2 == 0)
+                {
+                    timer.Stop();
+                    MessageBox.Show("Time is up");
+                }
+                    LableTimerPlayer2.Text = minPlayer2.ToString() + ":" + secPlayer2.ToString();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void LableTimerPlayer2_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void Chess_Load(object sender, EventArgs e)
         {
-        
+            Play();
+
+            GameTypeLable.Text= Gametype;
+
+            if (Gametype== "Blitz")
+            {
+                secPlayer1 = 0;
+                minPlayer1 = 3;
+                secPlayer2 = 0;
+                minPlayer2 = 3;
+
+                secIncrement+=2;
+            }
+            else if (Gametype == "Bullet")
+            {
+                secPlayer1 = 0;
+                minPlayer1 = 1;
+                secPlayer2 = 0;
+                minPlayer2 = 1;
+
+
+
+            }
+            else if (Gametype == "Rapid")
+            {
+                secPlayer1 = 0;
+                minPlayer1 = 10;
+                secPlayer2 = 0;
+                minPlayer2 = 10;
+
+                secIncrement+=5;
+
+
+            }
+            else if (Gametype == "Classical")
+            {
+
+                secPlayer1 = 0;
+                minPlayer1 = 30;
+                secPlayer2 = 0;
+                minPlayer2 = 30;
+            }          
+            else
+            {
+                secPlayer1 = 0;
+                minPlayer1 = 3;
+                secPlayer2 = 0;
+                minPlayer2 = 3;
+            }
+
+
+
+
+            BackColor = clr_bac1k;
+            CheckPlayerName();
         }
 
     }

@@ -25,3 +25,14 @@ C:\Users\PC\Desktop\Codes\Chess Game\Chess\obj\Release\Chess.csproj.GenerateReso
 C:\Users\PC\Desktop\Codes\Chess Game\Chess\obj\Release\Chess.csproj.CoreCompileInputs.cache
 C:\Users\PC\Desktop\Codes\Chess Game\Chess\obj\Release\Chess.exe
 C:\Users\PC\Desktop\Codes\Chess Game\Chess\obj\Release\Chess.pdb
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\bin\Release\Chess.exe.config
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\bin\Release\Chess.exe
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\bin\Release\Chess.pdb
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.csproj.AssemblyReference.cache
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.Chess.resources
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.Main.resources
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.Properties.Resources.resources
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.csproj.GenerateResource.cache
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.csproj.CoreCompileInputs.cache
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.exe
+E:\Computer science\Level 3 - second term\Visual programming\Chess Project\Chess Game\Chess\obj\Release\Chess.pdb
